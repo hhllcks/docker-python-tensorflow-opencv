@@ -2,16 +2,15 @@
 ## Based on this repository https://github.com/fbcotter/docker-tensorflow-opencv
 
 ARG CUDA_VERSION=10.0
-ARG OPENCV_VERSION=3.4.2
-ARG TENSORFLOW_VERSION=1.13.1
 
-FROM nvidia/cuda:$CUDA_VERSION-cudnn7-runtime-ubuntu16.04
-MAINTAINER Hendrik Hilleckes <hhllcks@gmail.com>
+FROM nvidia/cuda:${CUDA_VERSION}-cudnn7-runtime-ubuntu16.04
+LABEL maintainer="hhllcks@gmail.com"
 
 ###########################
 ### TENSORFLOW INSTALL  ###
 ###########################
 
+ARG TENSORFLOW_VERSION=1.13.1
 ARG https_proxy
 ARG http_proxy
 
@@ -51,7 +50,7 @@ RUN pip3 --no-cache-dir install \
     py3nvml
 
 # Install tensorflow
-RUN pip3 --no-cache-dir install tensorflow-gpu==$TENSORFLOW_VERSION
+RUN pip3 --no-cache-dir install tensorflow-gpu==${TENSORFLOW_VERSION}
 
 # Set the library path to use cuda and cupti
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
@@ -60,13 +59,15 @@ ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD
 ###  OPENCV INSTALL  ###
 ########################
 
+ARG OPENCV_VERSION=3.4.2
+
 WORKDIR /
 
 ## Build opencv
-RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip \
-    && unzip $OPENCV_VERSION.zip \
-    && mkdir /opencv-$OPENCV_VERSION/cmake_binary \
-    && cd /opencv-$OPENCV_VERSION/cmake_binary \
+RUN wget https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip \
+    && unzip ${OPENCV_VERSION}.zip \
+    && mkdir /opencv-${OPENCV_VERSION}/cmake_binary \
+    && cd /opencv-${OPENCV_VERSION}/cmake_binary \
     && cmake -DBUILD_TIFF=ON \
        -DBUILD_opencv_java=OFF \
        -DBUILD_SHARED_LIBS=OFF \
@@ -74,7 +75,7 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip \
        # -DENABLE_FAST_MATH=1 \
        # -DCUDA_FAST_MATH=1 \
        -DWITH_CUBLAS=1 \
-       -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-$CUDA_VERSION \
+       -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-${CUDA_VERSION} \
        ##
        ## Should compile for most card
        ## 3.5 binary code for devices with compute capability 3.5 and 3.7,
@@ -109,5 +110,5 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip \
     && export NUMPROC=$(nproc --all) \
     && make -j$NUMPROC install \
     ## Remove following lines if you need to move openCv
-    && rm /$OPENCV_VERSION.zip \
-    && rm -r /opencv-$OPENCV_VERSION
+    && rm /${OPENCV_VERSION}.zip \
+    && rm -r /opencv-${OPENCV_VERSION}

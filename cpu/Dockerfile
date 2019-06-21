@@ -1,7 +1,6 @@
 ## Dockerfile to build opencv from sources
 ## Based on this repository https://github.com/fbcotter/docker-tensorflow-opencv
 
-ARG OPENCV_VERSION=3.4.2
 ARG TENSORFLOW_VERSION=1.13.1
 
 FROM tensorflow/tensorflow:$TENSORFLOW_VERSION-py3
@@ -10,6 +9,8 @@ MAINTAINER Hendrik Hilleckes <hhllcks@gmail.com>
 ########################
 ###  OPENCV INSTALL  ###
 ########################
+
+ARG OPENCV_VERSION=3.4.2
 
 RUN apt-get update
 
