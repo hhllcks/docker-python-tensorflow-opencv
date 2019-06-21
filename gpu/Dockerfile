@@ -111,5 +111,3 @@ RUN wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.zip \
     ## Remove following lines if you need to move openCv
     && rm /$OPENCV_VERSION.zip \
     && rm -r /opencv-$OPENCV_VERSION
-
-WORKDIR /home
