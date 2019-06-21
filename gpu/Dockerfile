@@ -5,7 +5,7 @@ ARG CUDA_VERSION=10.0
 ARG OPENCV_VERSION=3.4.2
 ARG TENSORFLOW_VERSION=1.13.1
 
-FROM nvidia/cuda:$CUDA_VERSION-cudnn7-runtime-ubuntu18.04
+FROM nvidia/cuda:$CUDA_VERSION-cudnn7-runtime-ubuntu16.04
 MAINTAINER Hendrik Hilleckes <hhllcks@gmail.com>
 
 ###########################
